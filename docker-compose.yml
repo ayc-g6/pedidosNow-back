@@ -1,0 +1,14 @@
+version: '3'
+services:
+  postgres:
+    ports:
+      - 5432:5432
+    image: 'postgres:13'
+    env_file:
+      - .env # configure postgres
+
+  webapi:
+    build:
+      context: ./
+    ports:
+      - 8000:8000
