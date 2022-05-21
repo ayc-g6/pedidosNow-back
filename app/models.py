@@ -3,8 +3,8 @@ from sqlalchemy.orm import relationship
 
 from .database import Base
 
-class Authentication(Base):
-    __tablename__ = 'authentication'
+class Auth(Base):
+    __tablename__ = 'auth'
     id = Column(String(500), primaryKey=True)
     email = Column(String(500), nullable=False, unique=True)
     hashed_password = Column(String(100), nullable=False)
