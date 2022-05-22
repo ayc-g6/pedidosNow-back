@@ -19,3 +19,5 @@ services:
     depends_on: 
       - postgres
     restart: on-failure:5
+    env_file:
+      - .env

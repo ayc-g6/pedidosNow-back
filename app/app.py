@@ -20,7 +20,7 @@ def get_db():
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "Hello World "}
 
 @app.post("/customer/", response_model=schemas.Auth)
 def create_customer(auth_customer: schemas.AuthCustomerCreate, db: Session = Depends(get_db)):
