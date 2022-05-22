@@ -39,3 +39,7 @@ def create_business(auth_business: schemas.AuthBusinessCreate, db: Session = Dep
 @app.get('/auth/', response_model=List[schemas.Auth])
 def read_auths(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return crud.get_auths(db, skip=skip, limit=limit)
+
+@app.post("/product/")
+def create_product(product: schemas.ProductBase, db: Session = Depends(get_db)):
+    return crud.create_product(db, product)
