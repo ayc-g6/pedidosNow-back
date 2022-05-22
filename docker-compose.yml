@@ -3,7 +3,7 @@ services:
   postgres:
     ports:
       - 5432:5432
-    image: 'postgres:13'
+    image: 'postgres:14.3-alpine'
     env_file:
       - .env # configure postgres
 
@@ -15,3 +15,6 @@ services:
       - ./app:/app
     ports:
       - 8000:8000
+    depends_on: 
+      - postgres
+    restart: on-failure:5
