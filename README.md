@@ -5,11 +5,7 @@
 Run 
 
 ```
-cp .env.example .env
-
-docker-compose build
-
-docker-compose up -d
+bash script/build_app.sh
 ```
 
 The application should be running on http://www.localhost:8000/
