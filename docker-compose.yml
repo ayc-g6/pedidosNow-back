@@ -10,5 +10,8 @@ services:
   webapi:
     build:
       context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - ./app:/app
     ports:
       - 8000:8000
