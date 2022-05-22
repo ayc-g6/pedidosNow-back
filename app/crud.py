@@ -9,10 +9,22 @@ def get_auth_by_email(db: Session, email: str):
 def get_auths(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Auth).offset(skip).limit(limit).all()
 
-def create_auth(db: Session, auth: schemas.AuthCreate):
-    hashed_password = auth.password # TODO Hash password
-    db_auth = models.Auth(email=auth.email, hashed_password=hashed_password)
+def create_customer(db: Session, customer: schemas.AuthCustomerCreate):
+    hashed_password = customer.password # TODO Hash password
+    auth_id = str(uuid.uuid4())
+    db_auth = models.Auth(id=auth_id, email=customer.email, hashed_password=hashed_password)
+    db_customer = models.Customer(id=auth_id, username=customer.username)
     db.add(db_auth)
+    db.add(db_customer)
     db.commit()
-    db.refresh(db_auth)
+    return db_auth
+
+def create_business(db: Session, business: schemas.AuthBusinessCreate):
+    hashed_password = business.password # TODO Hash password
+    auth_id = str(uuid.uuid4())
+    db_auth = models.Auth(id=auth_id, email=business.email, hashed_password=hashed_password)
+    db_customer = models.Business(id=auth_id, business_name=business.business_name, address=business.address)
+    db.add(db_auth)
+    db.add(db_customer)
+    db.commit()
     return db_auth

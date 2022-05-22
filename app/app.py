@@ -22,12 +22,19 @@ def get_db():
 async def root():
     return {"message": "Hello World"}
 
-@app.post("/auth/", response_model=schemas.Auth)
-def create_auth(auth: schemas.AuthCreate, db: Session = Depends(get_db)):
-    db_auth = crud.get_auth_by_email(db, email=auth.email)
+@app.post("/customer/", response_model=schemas.Auth)
+def create_customer(auth_customer: schemas.AuthCustomerCreate, db: Session = Depends(get_db)):
+    db_auth = crud.get_auth_by_email(db, email=auth_customer.email)
     if db_auth:
         raise HTTPException(status_code=400, detail="Email already registered")
-    return crud.create_auth(db, auth)
+    return crud.create_customer(db, auth_customer)
+
+@app.post("/business/", response_model=schemas.Auth)
+def create_business(auth_business: schemas.AuthBusinessCreate, db: Session = Depends(get_db)):
+    db_auth = crud.get_auth_by_email(db, email=auth_business.email)
+    if db_auth:
+        raise HTTPException(status_code=400, detail="Email already registered")
+    return crud.create_business(db, auth_business)  
 
 @app.get('/auth/', response_model=List[schemas.Auth])
 def read_auths(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
