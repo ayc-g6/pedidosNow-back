@@ -1,5 +1,11 @@
 from pydantic import BaseModel 
 
+
+class ProductBase(BaseModel):
+    name: str
+    price: float
+    owner: str
+
 class AuthBase(BaseModel):
     email: str
 

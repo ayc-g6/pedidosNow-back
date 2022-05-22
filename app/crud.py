@@ -28,3 +28,14 @@ def create_business(db: Session, business: schemas.AuthBusinessCreate):
     db.add(db_customer)
     db.commit()
     return db_auth
+
+def create_product(db: Session, product: schemas.ProductBase):
+    # hashed_password = business.password # TODO Hash password
+    # auth_id = str(uuid.uuid4())
+    # db_auth = models.Auth(id=auth_id, email=business.email, hashed_password=hashed_password)
+    product_id = str(uuid.uuid4())
+    db_product = models.Product(id=product_id, name=product.name, price=product.price, owner=product.owner)
+    # db.add(db_auth)
+    db.add(db_product)
+    db.commit()
+    return db_product
