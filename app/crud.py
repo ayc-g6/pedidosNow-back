@@ -38,3 +38,6 @@ def create_product(db: Session, product: schemas.ProductBase):
     db.add(db_product)
     db.commit()
     return db_product
+
+def get_product_by_id(db: Session, product_id: int):
+    return db.query(models.Product).filter(models.Product.id == product_id).first()

@@ -69,3 +69,11 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
 @app.post("/product/")
 def create_product(product: schemas.ProductBase, db: Session = Depends(get_db)):
     return crud.create_product(db, product)
+
+
+@app.get("/product/{product_id}")
+def get_product(product_id: int, db: Session = Depends(get_db)):
+    product = crud.get_product_by_id(db, product_id)
+    if product is None:
+        raise HTTPException(status_code=404, detail="Product not found")
+    return product
