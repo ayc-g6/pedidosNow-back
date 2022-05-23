@@ -29,12 +29,8 @@ def create_business(db: Session, business: schemas.AuthBusinessCreationRequest):
     return schemas.AuthBusinessCreationResponse(id=auth_id, business_name=business.business_name, email=business.email, address=business.address)
 
 def create_product(db: Session, product: schemas.ProductBase):
-    # hashed_password = business.password # TODO Hash password
-    # auth_id = str(uuid.uuid4())
-    # db_auth = models.Auth(id=auth_id, email=business.email, hashed_password=hashed_password)
-    # product_id = str(uuid.uuid4())
+    #todo we should get owner from current session
     db_product = models.Product(name=product.name, price=product.price, owner=product.owner)
-    # db.add(db_auth)
     db.add(db_product)
     db.commit()
     return db_product
