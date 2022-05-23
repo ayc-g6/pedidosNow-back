@@ -22,7 +22,7 @@ class Business(Base):
 
 class Product(Base):
     __tablename__ = 'products'
-    id = Column(String, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, nullable=False)
     price = Column(Float, nullable=False)
     owner = Column(String, nullable=False)
