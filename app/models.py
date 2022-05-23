@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Float
 from sqlalchemy.orm import relationship
 
 from database import Base
@@ -19,3 +19,10 @@ class Business(Base):
     id = Column(String, primary_key=True)
     business_name = Column(String, nullable=False)
     address = Column(String, nullable=False)
+
+class Product(Base):
+    __tablename__ = 'products'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String, nullable=False)
+    price = Column(Float, nullable=False)
+    owner = Column(String, nullable=False)

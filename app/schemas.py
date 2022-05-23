@@ -27,6 +27,7 @@ class AuthBusinessCreationResponse(AuthBase):
 class AuthLeak(AuthBase):
     id: str
 
+# TODO Not really used... come back later and see if deleteable - Santi
 class User(BaseModel):
     id: str
 
@@ -36,3 +37,8 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     id: Union[str, None] = None
+
+class ProductBase(BaseModel):
+    name: str
+    price: float
+    owner: str

@@ -16,7 +16,7 @@ app = FastAPI()
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "Hello World "}
 
 
 """ Sign Up Customer."""
@@ -65,3 +65,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
     )
     return {'access_token': access_token, "token_type": "bearer"}
 
+
+@app.post("/product/")
+def create_product(product: schemas.ProductBase, db: Session = Depends(get_db)):
+    return crud.create_product(db, product)
