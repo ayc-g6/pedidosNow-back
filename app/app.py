@@ -3,6 +3,8 @@ from typing import List
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
+from starlette.middleware.cors import CORSMiddleware
+
 from auth import authenticate_user, create_access_token, get_current_id, get_password_hash
 
 import crud, models, schemas
@@ -13,6 +15,14 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["POST", "GET"],
+	allow_headers=["*"],
+    max_age=3600,
+)
 
 @app.get("/")
 async def root():
