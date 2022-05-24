@@ -15,6 +15,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -45,6 +46,7 @@ def create_business(auth_business: schemas.AuthBusinessCreationRequest, db: Sess
     db_auth = crud.get_auth_by_email(db, email=auth_business.email)
     if db_auth:
         raise HTTPException(status_code=400, detail="Email already registered")
+    auth_business.password = get_password_hash(auth_business.password)
     return crud.create_business(db, auth_business)  
 
 
