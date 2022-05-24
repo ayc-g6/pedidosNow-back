@@ -3,6 +3,12 @@ import uuid
 
 import models, schemas
 
+def delete_database(db: Session):
+    db.query(models.Auth).delete()
+    db.query(models.Customer).delete()
+    db.query(models.Business).delete()
+    db.commit()
+
 def get_auth_by_email(db: Session, email: str):
     return db.query(models.Auth).filter(models.Auth.email == email).first()
 

@@ -29,6 +29,10 @@ app.add_middleware(
 async def root():
     return {"message": "Hello World "}
 
+@app.delete("/delete")
+def delete_database(db: Session = Depends(get_db)):
+    crud.delete_database(db)
+    return True
 
 """ Sign Up Customer."""
 @app.post("/customer/", response_model=schemas.AuthCustomerCreationResponse)
