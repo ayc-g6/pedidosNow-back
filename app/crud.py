@@ -15,6 +15,12 @@ def get_auth_by_email(db: Session, email: str):
 def get_auths(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Auth).offset(skip).limit(limit).all()
 
+def is_business(db: Session, id: str):
+    return bool(db.query(models.Business).filter(models.Business.id == id).first())
+
+def is_customer(db: Session, id: str):
+    return bool(db.query(models.Customer).filter(models.Customer.id == id).first())
+
 def create_customer(db: Session, customer: schemas.AuthCustomerCreationRequest):
     auth_id = str(uuid.uuid4())
     db_auth = models.Auth(id=auth_id, email=customer.email, hashed_password=customer.password)

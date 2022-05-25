@@ -34,6 +34,7 @@ class User(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str
+    scope: str
 
 class TokenData(BaseModel):
     id: Union[str, None] = None

@@ -5,7 +5,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from starlette.middleware.cors import CORSMiddleware
 
-from auth import authenticate_user, create_access_token, get_current_id, get_password_hash
+from auth import authenticate_scope, authenticate_user, create_access_token, get_current_id, get_password_hash
 
 import crud, models, schemas
 from database import get_db, engine
@@ -79,7 +79,11 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
     access_token = create_access_token(
         data={"sub": user_id}, expires_delta=access_token_expires
     )
-    return {'access_token': access_token, "token_type": "bearer"}
+    scope = authenticate_scope(user_id, form_data.scopes, db)
+    with open("log.txt", "w+") as my_log:
+        my_log.write(f"{form_data.scopes}\n")
+        my_log.write(f"{form_data}\n")
+    return {'access_token': access_token, "token_type": "bearer", "scope": scope}
 
 
 @app.post("/product/")
