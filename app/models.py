@@ -26,3 +26,7 @@ class Product(Base):
     name = Column(String, nullable=False)
     price = Column(Float, nullable=False)
     owner = Column(String, nullable=False)
+    calories = Column(Float, nullable=False)
+    protein = Column(Float, nullable=False)
+    carbs = Column(Float, nullable=False)
+    fat = Column(Float, nullable=False)
