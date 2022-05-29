@@ -108,5 +108,5 @@ def get_products_by_name(product_name: str, page_number: int, db: Session = Depe
 
 """ Ordenes."""
 @app.post("/order/")
-def create_order(product_id: str, customer_id: str, db: Session = Depends(get_db)):
-    return crud.create_order(db, product_id, customer_id)
+def create_order(order: schemas.Order, db: Session = Depends(get_db)):
+    return crud.create_order(db, order.product_id, order.customer_id)
