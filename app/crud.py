@@ -11,6 +11,10 @@ def delete_database(db: Session):
     db.query(models.Business).delete()
     db.commit()
 
+def delete_database_products(db: Session):
+    db.query(models.Product).delete()
+    db.commit()
+
 def get_auth_by_email(db: Session, email: str):
     return db.query(models.Auth).filter(models.Auth.email == email).first()
 
@@ -44,13 +48,14 @@ def create_business(db: Session, business: schemas.AuthBusinessCreationRequest):
 
 def create_product(db: Session, product: schemas.ProductBase):
     #todo we should get owner from current session
-    db_product = models.Product(name=product.name, price=product.price, owner=product.owner)
+    db_product = models.Product(name=product.name, price=product.price, owner=product.owner, calories=product.calories, protein=product.protein, carbs=product.carbs, fat=product.fat)
     db.add(db_product)
     db.commit()
     return db_product
 
-def get_product_by_id(db: Session, product_id: int):
-    return db.query(models.Product).filter(models.Product.id == product_id).first()
+def get_products_by_name(db: Session, product_name: str, page_number: int):
+    products = db.query(models.Product).filter(models.Product.name.contains(product_name)).limit(PRODUCTS_PER_PAGE).offset((page_number) * PRODUCTS_PER_PAGE).all()
+    return products
 
 def get_products_by_page_number(db: Session, page_number: int):
     return db.query(models.Product).limit(PRODUCTS_PER_PAGE).offset((page_number) * PRODUCTS_PER_PAGE).all()

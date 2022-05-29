@@ -26,9 +26,14 @@ class Product(Base):
     name = Column(String, nullable=False)
     price = Column(Float, nullable=False)
     owner = Column(String, nullable=False)
+    calories = Column(Float, nullable=False)
+    protein = Column(Float, nullable=False)
+    carbs = Column(Float, nullable=False)
+    fat = Column(Float, nullable=False)
 
 class Order(Base):
     __tablename__ = 'orders'
     id = Column(Integer, primary_key=True, autoincrement=True)
     customer_id = Column(String, nullable=False)
     product_id = Column(Integer, nullable=False)
+    

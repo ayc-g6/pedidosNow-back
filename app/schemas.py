@@ -43,8 +43,13 @@ class ProductBase(BaseModel):
     name: str
     price: float
     owner: str
+    calories: float
+    protein: float
+    carbs: float
+    fat: float
 
 class Order(BaseModel):
     id: int
     customer_id: str
     product_id: str
+    
