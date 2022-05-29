@@ -60,4 +60,8 @@ def get_products_by_name(db: Session, product_name: str, page_number: int):
 def get_products_by_page_number(db: Session, page_number: int):
     return db.query(models.Product).limit(PRODUCTS_PER_PAGE).offset((page_number) * PRODUCTS_PER_PAGE).all()
 
-# def create_order(db: Session, prdocut_id: int, customer_id: str):
+def create_order(db: Session, product_id: str, customer_id: str):
+    db_order = models.Order(product_id=product_id, customer_id=customer_id)
+    db.add(db_order)
+    db.commit()
+    return db_order
