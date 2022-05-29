@@ -34,6 +34,11 @@ def delete_database(db: Session = Depends(get_db)):
     crud.delete_database(db)
     return True
 
+@app.delete("/delete/products")
+def delete_products_database(db: Session = Depends(get_db)):
+    crud.delete_database_products(db)
+    return True
+
 """ Sign Up Customer."""
 @app.post("/customer/", response_model=schemas.AuthCustomerCreationResponse)
 def create_customer(auth_customer: schemas.AuthCustomerCreationRequest, db: Session = Depends(get_db)):

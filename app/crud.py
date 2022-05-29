@@ -11,6 +11,10 @@ def delete_database(db: Session):
     db.query(models.Business).delete()
     db.commit()
 
+def delete_database_products(db: Session):
+    db.query(models.Product).delete()
+    db.commit()
+
 def get_auth_by_email(db: Session, email: str):
     return db.query(models.Auth).filter(models.Auth.email == email).first()
 
