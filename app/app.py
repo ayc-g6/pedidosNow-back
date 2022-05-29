@@ -27,7 +27,7 @@ app.add_middleware(
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World "}
+    return {"message": "Hello World"}
 
 @app.delete("/delete")
 def delete_database(db: Session = Depends(get_db)):
@@ -85,7 +85,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
         my_log.write(f"{form_data}\n")
     return {'access_token': access_token, "token_type": "bearer", "scope": scope}
 
-
+""" Productos."""
 @app.post("/product/")
 def create_product(product: schemas.ProductBase, db: Session = Depends(get_db)):
     return crud.create_product(db, product)
@@ -102,3 +102,9 @@ def get_product(product_id: int, db: Session = Depends(get_db)):
 def get_product(page_number: int, db: Session = Depends(get_db)):
     products = crud.get_products_by_page_number(db, page_number)
     return products
+
+""" Ordenes."""
+@app.post("/order/")
+def create_order(product_id: int, db: Session = Depends(get_db)):
+
+    return crud.create_order(db, product_id,)

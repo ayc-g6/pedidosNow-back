@@ -43,3 +43,8 @@ class ProductBase(BaseModel):
     name: str
     price: float
     owner: str
+
+class Order(BaseModel):
+    id: int
+    customer_id: str
+    product_id: str

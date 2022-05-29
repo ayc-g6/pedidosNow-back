@@ -54,3 +54,5 @@ def get_product_by_id(db: Session, product_id: int):
 
 def get_products_by_page_number(db: Session, page_number: int):
     return db.query(models.Product).limit(PRODUCTS_PER_PAGE).offset((page_number) * PRODUCTS_PER_PAGE).all()
+
+# def create_order(db: Session, prdocut_id: int, customer_id: str):

@@ -26,3 +26,9 @@ class Product(Base):
     name = Column(String, nullable=False)
     price = Column(Float, nullable=False)
     owner = Column(String, nullable=False)
+
+class Order(Base):
+    __tablename__ = 'orders'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    customer_id = Column(String, nullable=False)
+    product_id = Column(Integer, nullable=False)
