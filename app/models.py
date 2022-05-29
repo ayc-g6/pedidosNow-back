@@ -35,5 +35,5 @@ class Order(Base):
     __tablename__ = 'orders'
     id = Column(Integer, primary_key=True, autoincrement=True)
     customer_id = Column(String, nullable=False)
-    product_id = Column(Integer, nullable=False)
+    product_id = Column(String, nullable=False)
     
