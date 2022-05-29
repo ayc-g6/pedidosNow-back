@@ -96,12 +96,10 @@ def create_product(product: schemas.ProductBase, db: Session = Depends(get_db)):
     return crud.create_product(db, product)
 
 
-@app.get("/product/{product_id}")
-def get_product(product_id: int, db: Session = Depends(get_db)):
-    product = crud.get_product_by_id(db, product_id)
-    if product is None:
-        raise HTTPException(status_code=404, detail="Product not found")
-    return product
+@app.get("/product/{product_name}/{page_number}")
+def get_products_by_name(product_name: str, page_number: int, db: Session = Depends(get_db)):
+    products = crud.get_products_by_name(db, product_name, page_number)
+    return products
 
 @app.get("/product/all/{page_number}")
 def get_product(page_number: int, db: Session = Depends(get_db)):

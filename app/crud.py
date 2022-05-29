@@ -53,8 +53,9 @@ def create_product(db: Session, product: schemas.ProductBase):
     db.commit()
     return db_product
 
-def get_product_by_id(db: Session, product_id: int):
-    return db.query(models.Product).filter(models.Product.id == product_id).first()
+def get_products_by_name(db: Session, product_name: str, page_number: int):
+    products = db.query(models.Product).filter(models.Product.name.contains(product_name)).limit(PRODUCTS_PER_PAGE).offset((page_number) * PRODUCTS_PER_PAGE).all()
+    return products
 
 def get_products_by_page_number(db: Session, page_number: int):
     return db.query(models.Product).limit(PRODUCTS_PER_PAGE).offset((page_number) * PRODUCTS_PER_PAGE).all()
