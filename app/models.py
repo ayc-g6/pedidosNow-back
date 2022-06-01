@@ -14,6 +14,11 @@ class Customer(Base):
     id = Column(String, primary_key=True)
     username = Column(String, nullable=False)
 
+class Delivery(Base):
+    __tablename__ = 'deliveries'
+    id = Column(String, primary_key=True)
+    username = Column(String, nullable=False)
+
 class Business(Base):
     __tablename__ = 'businesses'
     id = Column(String, primary_key=True)

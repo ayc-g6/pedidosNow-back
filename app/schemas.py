@@ -8,6 +8,9 @@ class AuthBase(BaseModel):
 class AuthCreationRequestBase(AuthBase):
     password: str
 
+class AuthDeliveryCreationRequest(AuthCreationRequestBase):
+    username: str
+
 class AuthCustomerCreationRequest(AuthCreationRequestBase):
     username: str
 
@@ -18,7 +21,11 @@ class AuthBusinessCreationRequest(AuthCreationRequestBase):
 class AuthCustomerCreationResponse(AuthBase):
     id: str
     username: str
-    
+
+class AuthDeliveryCreationResponse(AuthBase):
+    id: str
+    username: str
+
 class AuthBusinessCreationResponse(AuthBase):
     id: str
     business_name: str

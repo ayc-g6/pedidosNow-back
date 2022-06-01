@@ -48,6 +48,14 @@ def create_customer(auth_customer: schemas.AuthCustomerCreationRequest, db: Sess
     auth_customer.password = get_password_hash(auth_customer.password)
     return crud.create_customer(db, auth_customer)
 
+""" Sign Up Delivery."""
+@app.post("/delivery/", response_model=schemas.AuthDeliveryCreationResponse)
+def create_delivery(auth_delivery: schemas.AuthDeliveryCreationRequest, db: Session = Depends(get_db)):
+    db_auth = crud.get_auth_by_email(db, email=auth_delivery.email)
+    if db_auth:
+        raise HTTPException(status_code=400, detail="Email already registered")
+    auth_delivery.password = get_password_hash(auth_delivery.password)
+    return crud.create_delivery(db, auth_delivery)
 
 """ Sign Up Business."""
 @app.post("/business/", response_model=schemas.AuthBusinessCreationResponse)
