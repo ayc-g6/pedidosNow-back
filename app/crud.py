@@ -9,6 +9,7 @@ def delete_database(db: Session):
     db.query(models.Auth).delete()
     db.query(models.Customer).delete()
     db.query(models.Business).delete()
+    db.query(models.Delivery).delete()
     db.commit()
 
 def delete_database_products(db: Session):
@@ -26,6 +27,18 @@ def is_business(db: Session, id: str):
 
 def is_customer(db: Session, id: str):
     return bool(db.query(models.Customer).filter(models.Customer.id == id).first())
+
+def is_delivery(db: Session, id: str):
+    return bool(db.query(models.Delivery).filter(models.Delivery.id == id).first())
+
+def create_delivery(db: Session, delivery: schemas.AuthDeliveryCreationRequest):
+    auth_id = str(uuid.uuid4())
+    db_auth = models.Auth(id=auth_id, email=delivery.email, hashed_password=delivery.password)
+    db_delivery = models.Delivery(id=auth_id, username=delivery.username)
+    db.add(db_auth)
+    db.add(db_delivery)
+    db.commit()
+    return schemas.AuthDeliveryCreationResponse(id=auth_id, username=delivery.username, email=delivery.email)
 
 def create_customer(db: Session, customer: schemas.AuthCustomerCreationRequest):
     auth_id = str(uuid.uuid4())
