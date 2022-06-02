@@ -63,6 +63,7 @@ def create_business(auth_business: schemas.AuthBusinessCreationRequest, db: Sess
 def leak_auths(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return crud.get_auths(db, skip=skip, limit=limit)
 
+
 """ Login General."""
 @app.post("/token/", response_model=schemas.Token)
 def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
@@ -99,7 +100,9 @@ def get_products_by_name(product_name: str, page_number: int, db: Session = Depe
     products = crud.get_products_by_name(db, product_name, page_number)
     return products
 
+
 """ Ordenes."""
 @app.post("/order/")
-def create_order(order: schemas.Order, db: Session = Depends(get_db)):
-    return crud.create_order(db, order.product_id, order.customer_id)
+def create_order(order: schemas.Order, current_user: schemas.User = Depends(get_current_id), db: Session = Depends(get_db)):
+    order.customer_id = current_user
+    return crud.create_order(db, order)

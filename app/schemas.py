@@ -49,6 +49,12 @@ class ProductBase(BaseModel):
     fat: float
 
 class Order(BaseModel):
-    customer_id: str
     product_id: str
+    business_id: str
+    customer_id: str
+    delivery_address: str
+    quantity: int
+    state: int
+    
+
     
