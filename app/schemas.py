@@ -49,7 +49,6 @@ class TokenData(BaseModel):
 class ProductBase(BaseModel):
     name: str
     price: float
-    owner: str
     calories: float
     protein: float
     carbs: float
