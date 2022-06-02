@@ -69,8 +69,14 @@ def get_products_by_name(db: Session, product_name: str, page_number: int):
     products = db.query(models.Product).filter(models.Product.name.contains(product_name)).limit(PRODUCTS_PER_PAGE).offset((page_number) * PRODUCTS_PER_PAGE).all()
     return products
 
-def get_products_by_page_number(db: Session, page_number: int):
-    return db.query(models.Product).limit(PRODUCTS_PER_PAGE).offset((page_number) * PRODUCTS_PER_PAGE).all()
+def get_products_by_page_number(db: Session, page_number: int, filter: models.ProductFilter):
+    query = db.query(models.Product)
+    if filter.id is not None:
+        query = query.filter(models.Product.id == filter.id)
+    if filter.name is not None:
+        query = query.filter(models.Product.name == filter.name)
+    query = query.limit(PRODUCTS_PER_PAGE).offset((page_number) * PRODUCTS_PER_PAGE)
+    return query.all()
 
 def create_order(db: Session, order: schemas.Order):
     db_order = models.Order(product_id=order.product_id, business_id=order.business_id, customer_id=order.customer_id, delivery_address=order.delivery_address, quantity=order.quantity, state=order.state)

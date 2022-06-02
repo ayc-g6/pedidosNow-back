@@ -98,8 +98,8 @@ def create_product(product: schemas.ProductBase, current_user: schemas.User = De
 
 
 @app.get("/product/all/{page_number}")
-def get_product(page_number: int, db: Session = Depends(get_db)):
-    products = crud.get_products_by_page_number(db, page_number)
+def get_product(page_number: int, db: Session = Depends(get_db), filter: models.ProductFilter = Depends()):
+    products = crud.get_products_by_page_number(db, page_number, filter)
     return products
 
 @app.get("/product/{product_name}/{page_number}")

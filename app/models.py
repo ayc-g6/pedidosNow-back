@@ -1,5 +1,6 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Float
 from sqlalchemy.orm import relationship
+from typing import Optional
 
 from database import Base
 
@@ -45,4 +46,13 @@ class Order(Base):
     delivery_address = Column(String, nullable=False)
     quantity = Column(Integer, nullable=False)
     state = Column(Integer, nullable=False)
-    
+
+
+class ProductFilter:
+    def __init__(
+        self,
+        id: Optional[int] = None,
+        name: Optional[str] = None,
+    ):
+        self.id = id
+        self.name = name
