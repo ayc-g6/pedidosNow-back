@@ -72,8 +72,8 @@ def get_products_by_name(db: Session, product_name: str, page_number: int):
 def get_products_by_page_number(db: Session, page_number: int):
     return db.query(models.Product).limit(PRODUCTS_PER_PAGE).offset((page_number) * PRODUCTS_PER_PAGE).all()
 
-def create_order(db: Session, product_id: str, customer_id: str):
-    db_order = models.Order(product_id=product_id, customer_id=customer_id)
+def create_order(db: Session, order: schemas.Order):
+    db_order = models.Order(product_id=order.product_id, business_id=order.business_id, customer_id=order.customer_id, delivery_address=order.delivery_address, quantity=order.quantity, state=order.state)
     db.add(db_order)
     db.commit()
     return db_order

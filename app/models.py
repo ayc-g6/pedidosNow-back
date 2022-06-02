@@ -40,5 +40,9 @@ class Order(Base):
     __tablename__ = 'orders'
     id = Column(Integer, primary_key=True, autoincrement=True)
     customer_id = Column(String, nullable=False)
+    business_id = Column(String, nullable=False)
     product_id = Column(String, nullable=False)
+    delivery_address = Column(String, nullable=False)
+    quantity = Column(Integer, nullable=False)
+    state = Column(Integer, nullable=False)
     
