@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-from typing import List
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
@@ -100,8 +99,8 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
 
 """ Productos."""
 @app.post("/product/")
-def create_product(product: schemas.ProductBase, db: Session = Depends(get_db)):
-    return crud.create_product(db, product)
+def create_product(product: schemas.ProductBase, current_user: schemas.User = Depends(get_current_id), db: Session = Depends(get_db)):
+    return crud.create_product(db, product, current_user.id)
 
 
 @app.get("/product/all/{page_number}")

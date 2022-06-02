@@ -59,9 +59,8 @@ def create_business(db: Session, business: schemas.AuthBusinessCreationRequest):
     db.commit()
     return schemas.AuthBusinessCreationResponse(id=auth_id, business_name=business.business_name, email=business.email, address=business.address)
 
-def create_product(db: Session, product: schemas.ProductBase):
-    #todo we should get owner from current session
-    db_product = models.Product(name=product.name, price=product.price, owner=product.owner, calories=product.calories, protein=product.protein, carbs=product.carbs, fat=product.fat)
+def create_product(db: Session, product: schemas.ProductBase, owner_id: str):
+    db_product = models.Product(name=product.name, price=product.price, owner=owner_id, calories=product.calories, protein=product.protein, carbs=product.carbs, fat=product.fat)
     db.add(db_product)
     db.commit()
     return db_product
