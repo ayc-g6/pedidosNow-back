@@ -75,6 +75,8 @@ def get_products_by_page_number(db: Session, page_number: int, filter: models.Pr
         query = query.filter(models.Product.id == filter.id)
     if filter.name is not None:
         query = query.filter(models.Product.name == filter.name)
+    if filter.owner is not None:
+        query = query.filter(models.Product.owner == filter.owner)
     query = query.limit(PRODUCTS_PER_PAGE).offset((page_number) * PRODUCTS_PER_PAGE)
     return query.all()
 
