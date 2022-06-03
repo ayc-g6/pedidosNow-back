@@ -26,6 +26,9 @@ class Business(Base):
     business_name = Column(String, nullable=False)
     address = Column(String, nullable=False)
 
+    class Config:
+        orm_mode = True
+
 class Product(Base):
     __tablename__ = 'products'
     id = Column(Integer, primary_key=True, autoincrement=True)

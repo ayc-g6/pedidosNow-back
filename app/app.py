@@ -60,7 +60,6 @@ def create_delivery(auth_delivery: schemas.AuthDeliveryCreationRequest, db: Sess
 @app.get("/business/{business_id}", response_model=schemas.BusinessProfileResponse)
 def read_business(business_id: str, db: Session = Depends(get_db)):
     db_business = crud.get_business(db, business_id)
-    print(db_business)
     if not db_business:
         raise HTTPException(status_code=404, detail="Business not found")
     return db_business
