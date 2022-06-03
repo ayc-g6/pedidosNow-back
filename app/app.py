@@ -57,7 +57,7 @@ def create_delivery(auth_delivery: schemas.AuthDeliveryCreationRequest, db: Sess
     return crud.create_delivery(db, auth_delivery)
 
 """ Get Business Profile"""
-@app.get("/business/{business_id}", response_model=schemas.BusinessProfileResponse)
+@app.get("/business/{business_id}")
 def read_business(business_id: str, db: Session = Depends(get_db)):
     db_business = crud.get_business(db, business_id)
     if not db_business:
