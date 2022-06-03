@@ -24,13 +24,7 @@ class AuthBusinessCreationResponse(AuthBase):
     business_name: str
     address: str
 
-class AuthLeak(AuthBase):
-    id: str
-
-# TODO Not really used... come back later and see if deleteable - Santi
-class User(BaseModel):
-    id: str
-
+# Login Related
 class Token(BaseModel):
     access_token: str
     token_type: str
@@ -39,6 +33,13 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     id: Union[str, None] = None
 
+# Business Related
+class BusinessProfileResponse(BaseModel):
+    id: str
+    business_name: str
+    address: str
+    
+# Product Related
 class ProductBase(BaseModel):
     name: str
     price: float
@@ -48,6 +49,7 @@ class ProductBase(BaseModel):
     carbs: float
     fat: float
 
+# Order Related
 class Order(BaseModel):
     customer_id: str
     product_id: str

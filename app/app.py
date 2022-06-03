@@ -48,6 +48,13 @@ def create_customer(auth_customer: schemas.AuthCustomerCreationRequest, db: Sess
     auth_customer.password = get_password_hash(auth_customer.password)
     return crud.create_customer(db, auth_customer)
 
+""" Get Business Profile"""
+@app.get("/business/{business_id}", response_model=schemas.BusinessProfileResponse)
+def read_business(business_id: str, db: Session = Depends(get_db)):
+    db_business = crud.get_business(db, business_id)
+    if not db_business:
+        raise HTTPException(status_code=404, detail="Business not found")
+    return db_business
 
 """ Sign Up Business."""
 @app.post("/business/", response_model=schemas.AuthBusinessCreationResponse)
@@ -58,12 +65,7 @@ def create_business(auth_business: schemas.AuthBusinessCreationRequest, db: Sess
     auth_business.password = get_password_hash(auth_business.password)
     return crud.create_business(db, auth_business)  
 
-
-@app.get('/auth/')
-def leak_auths(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    return crud.get_auths(db, skip=skip, limit=limit)
-
-
+# FIXME Deprecado y sera borrado
 """ Returns your user ID."""
 @app.get("/token/", response_model=schemas.TokenData)
 def read_token(current_user: schemas.User = Depends(get_current_id)):
@@ -94,7 +96,6 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
 @app.post("/product/")
 def create_product(product: schemas.ProductBase, db: Session = Depends(get_db)):
     return crud.create_product(db, product)
-
 
 @app.get("/product/all/{page_number}")
 def get_product(page_number: int, db: Session = Depends(get_db)):
