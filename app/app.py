@@ -95,7 +95,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
 
 """ Productos."""
 @app.post("/product/")
-def create_product(product: schemas.ProductBase, current_user: schemas.User = Depends(get_current_id), db: Session = Depends(get_db)):
+def create_product(product: schemas.ProductBase, current_user: schemas.TokenData = Depends(get_current_id), db: Session = Depends(get_db)):
     return crud.create_product(db, product, current_user.id)
 
 @app.get("/product/all/{page_number}")
@@ -109,7 +109,7 @@ def get_products_by_name(product_name: str, page_number: int, db: Session = Depe
     return products
 
 @app.get("/business/product/{page_number}")
-def get_business_product(page_number: int, db: Session = Depends(get_db), filter: models.ProductFilter = Depends(), current_user: schemas.User = Depends(get_current_id)):
+def get_business_product(page_number: int, db: Session = Depends(get_db), filter: models.ProductFilter = Depends(), current_user: schemas.TokenData = Depends(get_current_id)):
     filter.owner = current_user.id
     products = crud.get_products_by_page_number(db, page_number, filter)
     return products
@@ -117,6 +117,6 @@ def get_business_product(page_number: int, db: Session = Depends(get_db), filter
 
 """ Ordenes."""
 @app.post("/order/")
-def create_order(order: schemas.Order, current_user: schemas.User = Depends(get_current_id), db: Session = Depends(get_db)):
+def create_order(order: schemas.Order, current_user: schemas.TokenData = Depends(get_current_id), db: Session = Depends(get_db)):
     order.customer_id = current_user.id
     return crud.create_order(db, order)
