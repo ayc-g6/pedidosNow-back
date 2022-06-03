@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-from typing import List
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
@@ -48,6 +47,15 @@ def create_customer(auth_customer: schemas.AuthCustomerCreationRequest, db: Sess
     auth_customer.password = get_password_hash(auth_customer.password)
     return crud.create_customer(db, auth_customer)
 
+""" Sign Up Delivery."""
+@app.post("/delivery/", response_model=schemas.AuthDeliveryCreationResponse)
+def create_delivery(auth_delivery: schemas.AuthDeliveryCreationRequest, db: Session = Depends(get_db)):
+    db_auth = crud.get_auth_by_email(db, email=auth_delivery.email)
+    if db_auth:
+        raise HTTPException(status_code=400, detail="Email already registered")
+    auth_delivery.password = get_password_hash(auth_delivery.password)
+    return crud.create_delivery(db, auth_delivery)
+
 """ Get Business Profile"""
 @app.get("/business/{business_id}", response_model=schemas.BusinessProfileResponse)
 def read_business(business_id: str, db: Session = Depends(get_db)):
@@ -64,13 +72,6 @@ def create_business(auth_business: schemas.AuthBusinessCreationRequest, db: Sess
         raise HTTPException(status_code=400, detail="Email already registered")
     auth_business.password = get_password_hash(auth_business.password)
     return crud.create_business(db, auth_business)  
-
-# FIXME Deprecado y sera borrado
-""" Returns your user ID."""
-@app.get("/token/", response_model=schemas.TokenData)
-def read_token(current_user: schemas.User = Depends(get_current_id)):
-    return current_user
-
 
 """ Login General."""
 @app.post("/token/", response_model=schemas.Token)
@@ -94,12 +95,12 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
 
 """ Productos."""
 @app.post("/product/")
-def create_product(product: schemas.ProductBase, db: Session = Depends(get_db)):
-    return crud.create_product(db, product)
+def create_product(product: schemas.ProductBase, current_user: schemas.User = Depends(get_current_id), db: Session = Depends(get_db)):
+    return crud.create_product(db, product, current_user.id)
 
 @app.get("/product/all/{page_number}")
-def get_product(page_number: int, db: Session = Depends(get_db)):
-    products = crud.get_products_by_page_number(db, page_number)
+def get_product(page_number: int, db: Session = Depends(get_db), filter: models.ProductFilter = Depends()):
+    products = crud.get_products_by_page_number(db, page_number, filter)
     return products
 
 @app.get("/product/{product_name}/{page_number}")
@@ -107,7 +108,15 @@ def get_products_by_name(product_name: str, page_number: int, db: Session = Depe
     products = crud.get_products_by_name(db, product_name, page_number)
     return products
 
+@app.get("/business/product/{page_number}")
+def get_business_product(page_number: int, db: Session = Depends(get_db), filter: models.ProductFilter = Depends(), current_user: schemas.User = Depends(get_current_id)):
+    filter.owner = current_user.id
+    products = crud.get_products_by_page_number(db, page_number, filter)
+    return products
+
+
 """ Ordenes."""
 @app.post("/order/")
-def create_order(order: schemas.Order, db: Session = Depends(get_db)):
-    return crud.create_order(db, order.product_id, order.customer_id)
+def create_order(order: schemas.Order, current_user: schemas.User = Depends(get_current_id), db: Session = Depends(get_db)):
+    order.customer_id = current_user.id
+    return crud.create_order(db, order)

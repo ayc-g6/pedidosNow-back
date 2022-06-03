@@ -8,6 +8,9 @@ class AuthBase(BaseModel):
 class AuthCreationRequestBase(AuthBase):
     password: str
 
+class AuthDeliveryCreationRequest(AuthCreationRequestBase):
+    username: str
+
 class AuthCustomerCreationRequest(AuthCreationRequestBase):
     username: str
 
@@ -18,7 +21,11 @@ class AuthBusinessCreationRequest(AuthCreationRequestBase):
 class AuthCustomerCreationResponse(AuthBase):
     id: str
     username: str
-    
+
+class AuthDeliveryCreationResponse(AuthBase):
+    id: str
+    username: str
+
 class AuthBusinessCreationResponse(AuthBase):
     id: str
     business_name: str
@@ -43,7 +50,6 @@ class BusinessProfileResponse(BaseModel):
 class ProductBase(BaseModel):
     name: str
     price: float
-    owner: str
     calories: float
     protein: float
     carbs: float
@@ -51,6 +57,12 @@ class ProductBase(BaseModel):
 
 # Order Related
 class Order(BaseModel):
-    customer_id: str
     product_id: str
+    business_id: str
+    customer_id: str
+    delivery_address: str
+    quantity: int
+    state: int
+    
+
     

@@ -11,7 +11,7 @@ import schemas, crud
 SECRET_KEY = "367d57f766d20336be01f360637ccddfad8e6354d7878d4d2c499d0f9aac12ab"
 ALGORITHM = "HS256"
 
-VALID_SCOPES = {'business', 'customer'}
+VALID_SCOPES = {'business', 'customer', 'delivery'}
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -69,6 +69,8 @@ def get_scope(id: str, db: Session):
         return 'business'
     if crud.is_customer(db, id):
         return 'customer'
+    if crud.is_delivery(db, id):
+        return 'delivery'
     return None
 
 """ Receives an access token and returns the user id."""

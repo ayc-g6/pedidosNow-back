@@ -1,5 +1,6 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Float
 from sqlalchemy.orm import relationship
+from typing import Optional
 
 from database import Base
 
@@ -11,6 +12,11 @@ class Auth(Base):
 
 class Customer(Base):
     __tablename__ = 'customers'
+    id = Column(String, primary_key=True)
+    username = Column(String, nullable=False)
+
+class Delivery(Base):
+    __tablename__ = 'deliveries'
     id = Column(String, primary_key=True)
     username = Column(String, nullable=False)
 
@@ -35,5 +41,20 @@ class Order(Base):
     __tablename__ = 'orders'
     id = Column(Integer, primary_key=True, autoincrement=True)
     customer_id = Column(String, nullable=False)
+    business_id = Column(String, nullable=False)
     product_id = Column(String, nullable=False)
-    
+    delivery_address = Column(String, nullable=False)
+    quantity = Column(Integer, nullable=False)
+    state = Column(Integer, nullable=False)
+
+
+class ProductFilter:
+    def __init__(
+        self,
+        id: Optional[int] = None,
+        name: Optional[str] = None,
+        owner: Optional[str] = None
+    ):
+        self.id = id
+        self.name = name
+        self.owner = owner
