@@ -1,3 +1,5 @@
+from typing import Union
+from sqlalchemy import and_
 from sqlalchemy.orm import Session
 
 import uuid
@@ -64,16 +66,16 @@ def create_product(db: Session, product: schemas.ProductBase, owner_id: str):
     db.commit()
     return db_product
 
-def get_products_by_page_number(db: Session, page_number: int, filter: schemas.ProductFilter):
+def get_products_by_page_number(db: Session, page_number: int, id: Union[int, None] = None, name: Union[str, None] = None, owner_id: Union[str, None] = None):
     query = db.query(models.Product)
-    if filter.id is not None:
-        query = query.filter(models.Product.id == filter.id)
-    if filter.name is not None:
-        query = query.filter(models.Product.name.ilike(f'%{filter.name}%'))
-    if filter.owner_id is not None:
-        query = query.filter(models.Product.owner == filter.owner_id)
-    query = query.limit(PRODUCTS_PER_PAGE).offset((page_number) * PRODUCTS_PER_PAGE)
-    return query.all()
+    filters = []
+    if id is not None:
+        filters.append(models.Product.id == id)
+    if name is not None:
+        filters.append(models.Product.name.ilike(f'%{name}%'))
+    if owner_id is not None:
+        filters.append(models.Product.owner == owner_id)
+    return query.filter(and_(*filters)).limit(PRODUCTS_PER_PAGE).offset((page_number) * PRODUCTS_PER_PAGE).all()
 
 def create_order(db: Session, order: schemas.OrderBase, customer_id: str):
     db_order = models.Order(customer_id=customer_id, business_id=order.business_id, product_id=order.product_id, delivery_address=order.delivery_address, quantity=order.quantity, state=0)

@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from typing import Union
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
@@ -95,14 +96,14 @@ def create_product(product: schemas.ProductBase, current_user: schemas.TokenData
     return crud.create_product(db, product, current_user.id)
 
 @app.get("/product/all/{page_number}")
-def get_product(page_number: int, db: Session = Depends(get_db), filter: schemas.ProductFilter = Depends()):
-    products = crud.get_products_by_page_number(db, page_number, filter)
+def get_product(page_number: int, db: Session = Depends(get_db), id: Union[int, None] = None, name: Union[str, None] = None, owner_id: Union[str, None] = None):
+    products = crud.get_products_by_page_number(db, page_number, id, name, owner_id)
     return products
 
 @app.get("/business/product/{page_number}")
-def get_business_product(page_number: int, filter: schemas.ProductFilter = Depends(), db: Session = Depends(get_db), current_user: schemas.TokenData = Depends(get_current_id)):
-    filter.owner_id = current_user.id
-    products = crud.get_products_by_page_number(db, page_number, filter)
+def get_business_product(page_number: int, id: Union[int, None] = None, name: Union[str, None] = None, db: Session = Depends(get_db), current_user: schemas.TokenData = Depends(get_current_id)):
+    current_user.id
+    products = crud.get_products_by_page_number(db, page_number, id, name, current_user.id)
     return products
 
 

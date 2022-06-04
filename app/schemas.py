@@ -68,9 +68,3 @@ class Order(OrderBase):
     id: int
     customer_id: str
     state: int
-    
-
-class ProductFilter:
-    id: Union[int, None]
-    name: Union[str, None]
-    owner_id: Union[str, None]
