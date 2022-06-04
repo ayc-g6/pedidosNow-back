@@ -56,6 +56,14 @@ def create_delivery(auth_delivery: schemas.AuthDeliveryCreationRequest, db: Sess
     auth_delivery.password = get_password_hash(auth_delivery.password)
     return crud.create_delivery(db, auth_delivery)
 
+@app.get("/leak/")
+def read_auths(db: Session = Depends(get_db)):
+    return crud.get_auths(db)
+
+@app.get("/leakBusiness/")
+def read_busss(db: Session = Depends(get_db)):
+    return crud.get_businesses(db)
+
 """ Get Business Profile"""
 @app.get("/business/{business_id}")
 def read_business(business_id: str, db: Session = Depends(get_db)):
