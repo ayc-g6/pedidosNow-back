@@ -24,6 +24,7 @@ app.add_middleware(
     max_age=3600,
 )
 
+#
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
