@@ -117,6 +117,6 @@ def get_business_product(page_number: int, db: Session = Depends(get_db), filter
 
 """ Ordenes."""
 @app.post("/order/")
-def create_order(order: schemas.Order, current_user: schemas.TokenData = Depends(get_current_id), db: Session = Depends(get_db)):
-    order.customer_id = current_user.id
-    return crud.create_order(db, order)
+def create_order(order: schemas.OrderBase, current_user: schemas.TokenData = Depends(get_current_id), db: Session = Depends(get_db)):
+    customer_id = current_user.id
+    return crud.create_order(db, order, customer_id)
