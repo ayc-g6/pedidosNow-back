@@ -19,12 +19,6 @@ def delete_database_products(db: Session):
 def get_auth_by_email(db: Session, email: str):
     return db.query(models.Auth).filter(models.Auth.email == email).first()
 
-def get_auths(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Auth).offset(skip).limit(limit).all()
-
-def get_businesses(db: Session):
-    return db.query(models.Business).all()
-
 def is_business(db: Session, id: str):
     return bool(db.query(models.Business).filter(models.Business.id == id).first())
 
