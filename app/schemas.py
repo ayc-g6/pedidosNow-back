@@ -49,6 +49,7 @@ class BusinessProfileResponse(BaseModel):
 # Product Related
 class ProductBase(BaseModel):
     name: str
+    description: str
     price: float
     calories: float
     protein: float

@@ -33,12 +33,16 @@ class Product(Base):
     __tablename__ = 'products'
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, nullable=False)
+    description= Column(String, nullable= False)
     price = Column(Float, nullable=False)
     owner = Column(String, nullable=False)
     calories = Column(Float, nullable=False)
     protein = Column(Float, nullable=False)
     carbs = Column(Float, nullable=False)
     fat = Column(Float, nullable=False)
+
+    class Config:
+        orm_mode = True
 
 class Order(Base):
     __tablename__ = 'orders'
@@ -49,6 +53,9 @@ class Order(Base):
     delivery_address = Column(String, nullable=False)
     quantity = Column(Integer, nullable=False)
     state = Column(Integer, nullable=False)
+
+    class Config:
+        orm_mode = True
 
 
 class ProductFilter:
