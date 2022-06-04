@@ -77,6 +77,9 @@ def get_products_by_page_number(db: Session, page_number: int, id: Union[int, No
         filters.append(models.Product.owner == owner_id)
     return query.filter(and_(*filters)).limit(PRODUCTS_PER_PAGE).offset((page_number) * PRODUCTS_PER_PAGE).all()
 
+def get_orders_by_page_number(db: Session, page_number: int, business_id: str):
+    return db.query(models.Order).filter(models.Order.business_id == business_id).limit(PRODUCTS_PER_PAGE).offset((page_number) * PRODUCTS_PER_PAGE).all()
+
 def create_order(db: Session, order: schemas.OrderBase, customer_id: str):
     db_order = models.Order(customer_id=customer_id, business_id=order.business_id, product_id=order.product_id, delivery_address=order.delivery_address, quantity=order.quantity, state=0)
     db.add(db_order)

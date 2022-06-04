@@ -112,3 +112,8 @@ def get_business_product(page_number: int, id: Union[int, None] = None, name: Un
 def create_order(order: schemas.OrderBase, current_user: schemas.TokenData = Depends(get_current_id), db: Session = Depends(get_db)):
     customer_id = current_user.id
     return crud.create_order(db, order, customer_id)
+
+@app.get("/business/order/{page_number}")
+def get_orders(page_number: int, db: Session = Depends(get_db), current_user: schemas.TokenData = Depends(get_current_id)):
+    products = crud.get_orders_by_page_number(db, page_number, current_user.id)
+    return products
