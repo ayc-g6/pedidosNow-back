@@ -56,15 +56,3 @@ class Order(Base):
 
     class Config:
         orm_mode = True
-
-
-class ProductFilter:
-    def __init__(
-        self,
-        id: Optional[int] = None,
-        name: Optional[str] = None,
-        owner: Optional[str] = None
-    ):
-        self.id = id
-        self.name = name
-        self.owner = owner

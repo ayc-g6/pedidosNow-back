@@ -64,14 +64,14 @@ def create_product(db: Session, product: schemas.ProductBase, owner_id: str):
     db.commit()
     return db_product
 
-def get_products_by_page_number(db: Session, page_number: int, filter: models.ProductFilter):
+def get_products_by_page_number(db: Session, page_number: int, filter: schemas.ProductFilter):
     query = db.query(models.Product)
     if filter.id is not None:
         query = query.filter(models.Product.id == filter.id)
     if filter.name is not None:
         query = query.filter(models.Product.name.ilike(f'%{filter.name}%'))
-    if filter.owner is not None:
-        query = query.filter(models.Product.owner == filter.owner)
+    if filter.owner_id is not None:
+        query = query.filter(models.Product.owner == filter.owner_id)
     query = query.limit(PRODUCTS_PER_PAGE).offset((page_number) * PRODUCTS_PER_PAGE)
     return query.all()
 
