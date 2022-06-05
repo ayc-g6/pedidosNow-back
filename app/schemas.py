@@ -58,7 +58,7 @@ class ProductBase(BaseModel):
 
 # Order Related
 class OrderBase(BaseModel):
-    product_id: str
+    product_id: int
     business_id: str
     delivery_address: str
     quantity: int
