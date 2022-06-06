@@ -133,7 +133,13 @@ def update_order(order_id: int, state: int = Query(ge=1, le=4), current_user: sc
     order = crud.get_order_by_id(db, order_id)
     if not order:
         raise HTTPException(status_code=404, detail="Order not found")
-    updated_order = crud.update_order(db, order_id, state, current_user.id)
-    if updated_order is None:
-        raise HTTPException(status_code=409, detail="Order operation is not valid")
+    if state < order.state:
+        raise HTTPException(status_code=409, detail="Order state is higher than state received")
+    if state == 0 and not crud.is_delivery(db, current_user.id):
+        raise HTTPException(status_code=403, detail="User is not delivery")
+    if state == 1 and current_user.id != order.business_id:
+        raise HTTPException(status_code=403, detail="User is not owner of order products")
+    if state >= 2 and current_user.id != crud.get_order_delivery_by_id(db, order_id).delivery_id:
+        raise HTTPException(status_code=403, detail="User is not delivery of order")
+    updated_order = crud.update_order(db, order, state, current_user.id)
     return updated_order
