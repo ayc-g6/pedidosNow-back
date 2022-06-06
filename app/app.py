@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from typing import List, Union
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import FastAPI, Depends, HTTPException, Query, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from starlette.middleware.cors import CORSMiddleware
@@ -123,6 +123,6 @@ def get_business_orders(page_number: int, db: Session = Depends(get_db), current
     return orders
 
 @app.get("/order/all/{page_number}")
-def get_orders(page_number: int, db: Session = Depends(get_db), states : Union[List[int], None] = None):
+def get_orders(page_number: int, states : Union[List[int], None] = Query(default=None), db: Session = Depends(get_db)):
     orders = crud.get_orders_by_page_number(db, page_number, None, states)
     return orders
