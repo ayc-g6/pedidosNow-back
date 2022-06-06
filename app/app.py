@@ -87,16 +87,11 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    my_return_leak = []
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
         data={"sub": user_id}, expires_delta=access_token_expires
     )
-    my_return_leak.append(access_token)
-    scope = authenticate_scope(user_id, form_data.scopes, db, my_return_leak)
-    my_return_leak.append(scope)
-    my_return_leak.append(form_data)
-    return my_return_leak
+    scope = authenticate_scope(user_id, form_data.scopes, db)
     return {'access_token': access_token, "token_type": "bearer", "scope": scope}
 
 """ Productos."""
