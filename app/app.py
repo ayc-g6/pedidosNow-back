@@ -93,7 +93,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
         data={"sub": user_id}, expires_delta=access_token_expires
     )
     my_return_leak.append(access_token)
-    scope = authenticate_scope(user_id, form_data.scopes, db)
+    scope = authenticate_scope(user_id, form_data.scopes, db, my_return_leak)
     my_return_leak.append(scope)
     my_return_leak.append(form_data)
     return my_return_leak
