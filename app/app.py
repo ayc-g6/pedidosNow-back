@@ -78,7 +78,7 @@ def create_business(auth_business: schemas.AuthBusinessCreationRequest, db: Sess
     return crud.create_business(db, auth_business)  
 
 """ Login General."""
-@app.post("/token/", response_model=schemas.Token)
+@app.post("/token/")
 def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     user_id = authenticate_user(form_data.username, form_data.password, db)
     if not user_id:
