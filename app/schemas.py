@@ -64,6 +64,7 @@ class OrderBase(BaseModel):
     quantity: int
    
 
+# TODO Incomplete
 class Order(OrderBase):
     id: int
     customer_id: str

@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Float
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String, Float, func
 from sqlalchemy.orm import relationship
 from typing import Optional
 
@@ -47,13 +47,21 @@ class Product(Base):
 class Order(Base):
     __tablename__ = 'orders'
     id = Column(Integer, primary_key=True, autoincrement=True)
+    time_created = Column(DateTime(timezone=True), server_default=func.now())
+    time_updated = Column(DateTime(timezone=True), onupdate=func.now())
     customer_id = Column(String, nullable=False)
     business_id = Column(String, nullable=False)
     product_id = Column(Integer, nullable=False)
     delivery_address = Column(String, nullable=False)
     quantity = Column(Integer, nullable=False)
     state = Column(Integer, nullable=False)
-    delivery_id = Column(String, nullable=True)
+
+    class Config:
+        orm_mode = True
+
+class OrderDelivery(Base):
+    order_id = Column(Integer, primary_key=True)
+    delivery_id = Column(String, nullable=False)
 
     class Config:
         orm_mode = True

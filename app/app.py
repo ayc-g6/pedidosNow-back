@@ -129,11 +129,11 @@ def get_orders(page_number: int, states : Union[List[int], None] = Query(default
     return orders
 
 @app.patch("/order/{order_id}")
-def update_order(order_id: int, state: int = Query(ge=1, le=4), db: Session = Depends(get_db)):
+def update_order(order_id: int, state: int = Query(ge=1, le=4), current_user: schemas.TokenData = Depends(get_current_id), db: Session = Depends(get_db)):
     order = crud.get_order_by_id(db, order_id)
     if not order:
         raise HTTPException(status_code=404, detail="Order not found")
-    updated_order = crud.update_order(db, order_id, state)
+    updated_order = crud.update_order(db, order_id, state, current_user.id)
     if updated_order is None:
-        raise HTTPException(status_code=409, detail="Order state is posterior")
+        raise HTTPException(status_code=409, detail="Order operation is not valid")
     return updated_order

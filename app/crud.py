@@ -80,6 +80,9 @@ def get_products_by_page_number(db: Session, page_number: int, id: Union[int, No
 def get_order_by_id(db: Session, order_id: int):
     return db.query(models.Order).filter(models.Order.id == order_id).first()
 
+def get_order_delivery_by_id(db: Session, order_id: int):
+    return db.query(models.OrderDelivery).filter(models.OrderDelivery.order_id == order_id).first()
+
 def get_orders_by_page_number(db: Session, page_number: int, business_id: Union[str, None], states: Union[List[int], None] = None):
     query = db.query(models.Order)
     filters = []
@@ -98,11 +101,11 @@ def create_order(db: Session, order: schemas.OrderBase, customer_id: str):
     db.commit()
     return db_order
 
-def update_order(db: Session, order_id: int, state: str): 
-    db_order = db.query(models.Order).filter(models.Order.id == order_id).first() 
-    if state < db_order.state:
-        return None
-    db_order.state = state
+def update_order(db: Session, order, state: str, current_user_id: str): 
+    order.state = state
+    if state == 1:
+        db_order_delivery = models.OrderDelivery(order_id=order.id, delivery_id=current_user_id)
+        db.add(db_order_delivery)
     db.commit()
-    return db_order
+    return order
     
