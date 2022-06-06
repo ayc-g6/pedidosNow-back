@@ -47,18 +47,25 @@ def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None
     - The real scope of the user is not in the scopes
     Returns the real scope.
 """
-def authenticate_scope(id: str, scopes: List[str], db: Session):
+def authenticate_scope(id: str, scopes: List[str], db: Session, leak):
     scope_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Invalid scope",
         headers={"WWW-Authenticate": "Bearer"},
     )
-    print(scopes)
     for scope in scopes:
         if scope not in VALID_SCOPES:
+            leak.append(scope)
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                detail=leak,
+                headers={"WWW-Authenticate": "Bearer"})
             raise scope_exception
     scope = get_scope(id, db)
+    leak.append(f"scope by get_scope: {scope}")
     if scope not in scopes:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=leak,
+            headers={"WWW-Authenticate": "Bearer"})
         raise scope_exception
     return scope
 
