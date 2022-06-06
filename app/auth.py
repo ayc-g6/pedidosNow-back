@@ -53,6 +53,7 @@ def authenticate_scope(id: str, scopes: List[str], db: Session):
         detail="Invalid scope",
         headers={"WWW-Authenticate": "Bearer"},
     )
+    print(scopes)
     for scope in scopes:
         if scope not in VALID_SCOPES:
             raise scope_exception
@@ -65,12 +66,17 @@ def authenticate_scope(id: str, scopes: List[str], db: Session):
     If the id is not from a valid user, None is returned.
 """
 def get_scope(id: str, db: Session):
+    print(id)
     if crud.is_business(db, id):
+        print('bus')
         return 'business'
     if crud.is_customer(db, id):
+        print('cus')
         return 'customer'
     if crud.is_delivery(db, id):
+        print('del')
         return 'delivery'
+    print('non')
     return None
 
 """ Receives an access token and returns the user id."""
