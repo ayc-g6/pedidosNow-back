@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from typing import Union
+from typing import List, Union
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
@@ -118,6 +118,11 @@ def create_order(order: schemas.OrderBase, current_user: schemas.TokenData = Dep
     return crud.create_order(db, order, customer_id)
 
 @app.get("/business/order/{page_number}")
-def get_orders(page_number: int, db: Session = Depends(get_db), current_user: schemas.TokenData = Depends(get_current_id)):
-    products = crud.get_orders_by_page_number(db, page_number, current_user.id)
-    return products
+def get_business_orders(page_number: int, db: Session = Depends(get_db), current_user: schemas.TokenData = Depends(get_current_id)):
+    orders = crud.get_orders_by_page_number(db, page_number, current_user.id, None)
+    return orders
+
+@app.get("/order/all/{page_number}")
+def get_orders(page_number: int, db: Session = Depends(get_db), states : Union[List[int], None] = None):
+    orders = crud.get_orders_by_page_number(db, page_number, None, states)
+    return orders
