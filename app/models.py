@@ -60,6 +60,7 @@ class Order(Base):
         orm_mode = True
 
 class OrderDelivery(Base):
+    __tablename__ = 'order_delivery'
     order_id = Column(Integer, primary_key=True)
     delivery_id = Column(String, nullable=False)
 
