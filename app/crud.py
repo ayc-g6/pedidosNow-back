@@ -6,7 +6,7 @@ import uuid
 
 import models, schemas
 
-PRODUCTS_PER_PAGE = 5
+ITEMS_PER_PAGE = 5
 
 def delete_database(db: Session):
     db.query(models.Auth).delete()
@@ -19,12 +19,6 @@ def delete_database(db: Session):
 
 def get_auth_by_email(db: Session, email: str):
     return db.query(models.Auth).filter(models.Auth.email == email).first()
-
-def get_auths(db: Session):
-    return db.query(models.Auth).all()
-
-def get_delivery(db: Session):
-    return db.query(models.Delivery).all()
 
 def is_business(db: Session, id: str):
     return bool(db.query(models.Business).filter(models.Business.id == id).first())
@@ -81,7 +75,10 @@ def get_products_by_page_number(db: Session, page_number: int, id: Union[int, No
         filters.append(models.Product.name.ilike(f'%{name}%'))
     if owner_id is not None:
         filters.append(models.Product.owner == owner_id)
-    return query.filter(and_(*filters)).limit(PRODUCTS_PER_PAGE).offset((page_number) * PRODUCTS_PER_PAGE).all()
+    return query.filter(and_(*filters)).limit(ITEMS_PER_PAGE).offset((page_number) * ITEMS_PER_PAGE).all()
+
+def get_order_by_id(db: Session, order_id: int):
+    return db.query(models.Order).filter(models.Order.id == order_id).first()
 
 def get_orders_by_page_number(db: Session, page_number: int, business_id: Union[str, None], states: Union[List[int], None] = None):
     query = db.query(models.Order)
@@ -93,10 +90,19 @@ def get_orders_by_page_number(db: Session, page_number: int, business_id: Union[
         filters.append(or_(*states_filter))
     if business_id is not None:
         filters.append(models.Order.business_id == business_id)
-    return query.filter(and_(*filters)).limit(PRODUCTS_PER_PAGE).offset((page_number) * PRODUCTS_PER_PAGE).all()
+    return query.filter(and_(*filters)).limit(ITEMS_PER_PAGE).offset((page_number) * ITEMS_PER_PAGE).all()
 
 def create_order(db: Session, order: schemas.OrderBase, customer_id: str):
     db_order = models.Order(customer_id=customer_id, business_id=order.business_id, product_id=order.product_id, delivery_address=order.delivery_address, quantity=order.quantity, state=0)
     db.add(db_order)
     db.commit()
     return db_order
+
+def update_order(db: Session, order_id: int, state: str): 
+    db_order = db.query(models.Order).filter(models.Order.id == order_id).first() 
+    if state < db_order.state:
+        return None
+    db_order.state = state
+    db.commit()
+    return db_order
+    

@@ -53,6 +53,7 @@ class Order(Base):
     delivery_address = Column(String, nullable=False)
     quantity = Column(Integer, nullable=False)
     state = Column(Integer, nullable=False)
+    delivery_id = Column(String, nullable=True)
 
     class Config:
         orm_mode = True

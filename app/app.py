@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from typing import List, Union
 from fastapi import FastAPI, Depends, HTTPException, Query, status
 from fastapi.security import OAuth2PasswordRequestForm
+from pydantic import Required
 from sqlalchemy.orm import Session
 from starlette.middleware.cors import CORSMiddleware
 
@@ -126,3 +127,13 @@ def get_business_orders(page_number: int, db: Session = Depends(get_db), current
 def get_orders(page_number: int, states : Union[List[int], None] = Query(default=None), db: Session = Depends(get_db)):
     orders = crud.get_orders_by_page_number(db, page_number, None, states)
     return orders
+
+@app.patch("/order/{order_id}")
+def update_order(order_id: int, state: int = Query(ge=1, le=4), db: Session = Depends(get_db)):
+    order = crud.get_order_by_id(db, order_id)
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    updated_order = crud.update_order(db, order_id, state)
+    if updated_order is None:
+        raise HTTPException(status_code=409, detail="Order state is posterior")
+    return updated_order
