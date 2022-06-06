@@ -119,7 +119,7 @@ def create_order(order: schemas.OrderBase, current_user: schemas.TokenData = Dep
 
 @app.get("/business/order/{page_number}")
 def get_business_orders(page_number: int, db: Session = Depends(get_db), current_user: schemas.TokenData = Depends(get_current_id)):
-    orders = crud.get_orders_by_page_number(db, page_number, current_user.id, None)
+    orders = crud.get_orders_by_page_number(db, page_number, current_user.id, [1,2])
     return orders
 
 @app.get("/order/all/{page_number}")

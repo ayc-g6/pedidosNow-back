@@ -83,7 +83,7 @@ def get_products_by_page_number(db: Session, page_number: int, id: Union[int, No
         filters.append(models.Product.owner == owner_id)
     return query.filter(and_(*filters)).limit(PRODUCTS_PER_PAGE).offset((page_number) * PRODUCTS_PER_PAGE).all()
 
-def get_orders_by_page_number(db: Session, page_number: int, business_id: str, states: Union[List[int], None] = None):
+def get_orders_by_page_number(db: Session, page_number: int, business_id: Union[str, None], states: Union[List[int], None] = None):
     query = db.query(models.Order)
     filters = []
     if states is not None:
