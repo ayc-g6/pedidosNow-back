@@ -20,6 +20,12 @@ def delete_database(db: Session):
 def get_auth_by_email(db: Session, email: str):
     return db.query(models.Auth).filter(models.Auth.email == email).first()
 
+def get_auths(db: Session):
+    return db.query(models.Auth).all()
+
+def get_delivery(db: Session):
+    return db.query(models.Delivery).all()
+
 def is_business(db: Session, id: str):
     return bool(db.query(models.Business).filter(models.Business.id == id).first())
 

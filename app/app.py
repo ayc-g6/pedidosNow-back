@@ -29,6 +29,14 @@ app.add_middleware(
 async def root():
     return {"message": "Hello World"}
 
+@app.get('/leak')
+def leak_auths(db: Session = Depends(get_db)):
+    return crud.get_auths(db)
+
+@app.get('/leakDelivery')
+def leak_delivery(db: Session = Depends(get_db)):
+    return crud.get_delivery(db)
+
 @app.delete("/delete")
 def delete_database(db: Session = Depends(get_db)):
     crud.delete_database(db)
