@@ -112,8 +112,12 @@ def get_business_product(page_number: int, id: Union[int, None] = None, name: Un
     products = crud.get_products_by_page_number(db, page_number, id, name, current_user.id)
     return products
 
-
 """ Ordenes."""
+@app.get("/order/all/{page_number}")
+def get_orders(page_number: int, states : Union[List[int], None] = Query(default=None), db: Session = Depends(get_db)):
+    orders = crud.get_orders_by_page_number(db, page_number, None, None, states)
+    return orders
+
 @app.post("/order/")
 def create_order(order: schemas.OrderBase, current_user: schemas.TokenData = Depends(get_current_id), db: Session = Depends(get_db)):
     customer_id = current_user.id
@@ -121,7 +125,12 @@ def create_order(order: schemas.OrderBase, current_user: schemas.TokenData = Dep
 
 @app.get("/business/order/{page_number}")
 def get_business_orders(page_number: int, db: Session = Depends(get_db), current_user: schemas.TokenData = Depends(get_current_id)):
-    orders = crud.get_orders_by_page_number(db, page_number, current_user.id, [1,2])
+    orders = crud.get_orders_by_page_number(db, page_number, None, current_user.id, [1,2])
+    return orders
+
+@app.get("/customer/order/{page_number}")
+def get_customer_orders(page_number: int, db: Session = Depends(get_db), current_user: schemas.TokenData = Depends(get_current_id)):
+    orders = crud.get_orders_by_page_number(db, page_number, current_user.id, None, None)
     return orders
 
 @app.get("/order/{order_id}")
@@ -130,11 +139,6 @@ def get_order(order_id: int, db: Session = Depends(get_db)):
     if not order:
         raise HTTPException(status_code=404, detail="Order not found")
     return order
-
-@app.get("/order/all/{page_number}")
-def get_orders(page_number: int, states : Union[List[int], None] = Query(default=None), db: Session = Depends(get_db)):
-    orders = crud.get_orders_by_page_number(db, page_number, None, states)
-    return orders
 
 @app.patch("/order/{order_id}")
 def update_order(order_id: int, state: int = Query(ge=1, le=4), current_user: schemas.TokenData = Depends(get_current_id), db: Session = Depends(get_db)):
