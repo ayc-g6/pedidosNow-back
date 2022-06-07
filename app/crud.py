@@ -15,6 +15,7 @@ def delete_database(db: Session):
     db.query(models.Delivery).delete()
     db.query(models.Product).delete()
     db.query(models.Order).delete()
+    db.query(models.OrderDelivery).delete()
     db.commit()
 
 def get_auth_by_email(db: Session, email: str):
@@ -112,3 +113,7 @@ def update_order(db: Session, order, state: str, current_user_id: str):
     db.commit()
     return order
     
+def delete_order_delivery_by_id(db: Session, order_id: int):
+    db.query(models.OrderDelivery).filter(models.OrderDelivery.order_id == order_id).delete()
+    db.commit()
+    return

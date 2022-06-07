@@ -150,6 +150,8 @@ def update_order(order_id: int, state: int = Query(ge=1, le=4), current_user: sc
     if order.state >= 2 and current_user.id != crud.get_order_delivery_by_id(db, order_id).delivery_id:
         raise HTTPException(status_code=403, detail="User is not delivery of order")
     updated_order = crud.update_order(db, order, state, current_user.id)
+    if order.state == 4:
+        crud.delete_order_delivery_by_id(db, order_id)
     return updated_order
 
 @app.get("/delivery/order")
@@ -158,3 +160,9 @@ def get_current_work(current_user: schemas.TokenData = Depends(get_current_id), 
     if not work:
         raise HTTPException(status_code=404, detail="Work not found")
     return work
+
+@app.delete("/orderdelivery")
+def delete_orderdelivery(db: Session = Depends(get_db)):
+    db.query(models.OrderDelivery).delete()
+    db.commit()
+    return True
