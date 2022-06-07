@@ -124,6 +124,13 @@ def get_business_orders(page_number: int, db: Session = Depends(get_db), current
     orders = crud.get_orders_by_page_number(db, page_number, current_user.id, [1,2])
     return orders
 
+@app.get("/order/{order_id}")
+def get_order(order_id: int, db: Session = Depends(get_db)):
+    order = crud.get_order_by_id(db, order_id)
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    return order
+
 @app.get("/order/all/{page_number}")
 def get_orders(page_number: int, states : Union[List[int], None] = Query(default=None), db: Session = Depends(get_db)):
     orders = crud.get_orders_by_page_number(db, page_number, None, states)
