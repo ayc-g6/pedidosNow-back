@@ -83,6 +83,9 @@ def get_order_by_id(db: Session, order_id: int):
 def get_order_delivery_by_id(db: Session, order_id: int):
     return db.query(models.OrderDelivery).filter(models.OrderDelivery.order_id == order_id).first()
 
+def get_order_delivery_by_delivery(db: Session, delivery_id: str):
+    return db.query(models.OrderDelivery).filter(models.OrderDelivery.delivery_id == delivery_id).first()
+
 def get_orders_by_page_number(db: Session, page_number: int, business_id: Union[str, None], states: Union[List[int], None] = None):
     query = db.query(models.Order)
     filters = []

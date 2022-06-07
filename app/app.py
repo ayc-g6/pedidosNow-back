@@ -1,3 +1,4 @@
+from curses.ascii import HT
 from datetime import datetime, timedelta
 from typing import List, Union
 from fastapi import FastAPI, Depends, HTTPException, Query, status
@@ -143,3 +144,10 @@ def update_order(order_id: int, state: int = Query(ge=1, le=4), current_user: sc
         raise HTTPException(status_code=403, detail="User is not delivery of order")
     updated_order = crud.update_order(db, order, state, current_user.id)
     return updated_order
+
+@app.get("/delivery/order")
+def get_current_work(current_user: schemas.TokenData = Depends(get_current_id), db: Session = Depends(get_db)):
+    work = crud.get_order_delivery_by_delivery(db, current_user.id)
+    if not work:
+        raise HTTPException(status_code=404, detail="Work not found")
+    return work
