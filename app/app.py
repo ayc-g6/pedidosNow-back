@@ -31,14 +31,6 @@ app.add_middleware(
 async def root():
     return {"message": "Hello World"}
 
-@app.get('/leak')
-def leak_auths(db: Session = Depends(get_db)):
-    return crud.get_auths(db)
-
-@app.get('/leakDelivery')
-def leak_delivery(db: Session = Depends(get_db)):
-    return crud.get_delivery(db)
-
 @app.delete("/delete")
 def delete_database(db: Session = Depends(get_db)):
     crud.delete_database(db)
@@ -63,6 +55,10 @@ def create_delivery(auth_delivery: schemas.AuthDeliveryCreationRequest, db: Sess
     return crud.create_delivery(db, auth_delivery)
 
 """ Get Business Profile"""
+@app.get("/business")
+def read_business_self(current_user: schemas.TokenData = Depends(get_current_id), db: Session = Depends(get_db)):
+    return crud.get_business(db, current_user.id)
+
 @app.get("/business/{business_id}")
 def read_business(business_id: str, db: Session = Depends(get_db)):
     db_business = crud.get_business(db, business_id)
@@ -164,9 +160,3 @@ def get_current_work(current_user: schemas.TokenData = Depends(get_current_id), 
     if not work:
         raise HTTPException(status_code=404, detail="Work not found")
     return work
-
-@app.delete("/orderdelivery")
-def delete_orderdelivery(db: Session = Depends(get_db)):
-    db.query(models.OrderDelivery).delete()
-    db.commit()
-    return True
